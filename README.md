@@ -2,6 +2,17 @@
 
 * Code for the paper Multi Modal Deep Learning Based Crop Classification Using Multispectral and Multitemporal Satellite Imagery that will be published in KDD Applied Data Science Track 2020.
 
+* Software Configuration
+    * python==3.7.4
+    * tensorflow-gpu==1.13.1
+    * keras==2.2.4
+    * sklearn==0.21.2
+    * numpy==1.16.4
+    * matplotlib==3.1.1
+    * pandas==0.25.1
+    * configparser    
+    
+
 
 * Code information:
 
