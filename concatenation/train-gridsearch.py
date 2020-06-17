@@ -40,8 +40,8 @@ networks = {'resnet50': ResNet50,
              'vgg19':VGG19}
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop, water or energy""", default='water-lstm')
+parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='spatiotemporal-vgg')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()
@@ -187,8 +187,6 @@ for idx, row in grid_df.iterrows():
 
             # model history generate plot
             visualize.visualize_curves(n_epochs=num_epochs, tr=history.history['loss'], val=history.history['val_loss'], filename='{}/loss_{}.png'.format(plot_path, curr_time), network=str(config[parser_args.task]['NETWORK']), optimizer='adam', learning_rate=learning_rate, epsilon=epsilon, clf_type=parser_args.task, batch_size=batch_size, viz_type="loss", early_stopping=True)
-
-            visualize.visualize_curves(n_epochs=num_epochs, tr=history.history['acc'], val=history.history['val_acc'], filename='{}/acc_{}.png'.format(plot_path, curr_time), network=str(config[parser_args.task]['NETWORK']), optimizer='adam', learning_rate=learning_rate, epsilon=epsilon, clf_type=parser_args.task, batch_size=batch_size, viz_type="accuracy", early_stopping=True)
 
             # write grid to disk during current iteration to ensure that temporary results are stored
             grid_df.to_csv(grid_file, index=False)

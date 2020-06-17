@@ -27,7 +27,7 @@ test_accuracies = []
 kappa_scores = []
 
 for timestamp in timestamps[parser_args.task]:
-    model_name = os.path.join('/mnt/data3/crop-classification/8_models/', timestamp)
+    model_name = os.path.join('/home/kgadira/multi-modal-crop-classification/8_models/', timestamp)
     print(model_name)
     test_datagen = test_crop_generator(input_path=te_path, batch_size=1, mode="test", num_classes =6, epsilon = 0, resize_params = (224, 224), do_shuffle=True)
 
@@ -36,6 +36,7 @@ for timestamp in timestamps[parser_args.task]:
 
     model = load_model(model_name)
 
+    print(model.summary())
     all_predictions = []
     all_gt = []
     data_paths = []

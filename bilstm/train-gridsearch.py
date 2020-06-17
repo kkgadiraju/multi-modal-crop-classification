@@ -38,7 +38,7 @@ parser_args = parser.parse_args()
 config = configparser.ConfigParser()
 config.read(parser_args.configPath)
 
-hidden_units = 50
+hidden_units = 100
 batch_size = int(config[parser_args.task]['BATCH_SIZE'])
 tr_path = str(config[parser_args.task]['TRAIN_FOLDER'])
 val_path = str(config[parser_args.task]['VAL_FOLDER'])
@@ -50,7 +50,7 @@ epsilon = float(config[parser_args.task]['EPSILON'])
 plot_path = str(config['plotting']['PLOT_FOLDER'])
 measures_folder = str(config['plotting']['MEASURE_FOLDER'])
 
-grid_file = './{}_hu_grid.csv'.format(config[parser_args.task])
+grid_file = './{}_grid.csv'.format(config[parser_args.task])
 
 if os.path.exists(grid_file):
     grid_df = pd.read_csv(grid_file)
@@ -82,7 +82,6 @@ for idx, row in grid_df.iterrows():
             sys.exit(0)
         else:
             grid_df.loc[idx, 'timestamp'] = curr_time
-            #print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
 
 
             train_generator = crop_generator(input_path=tr_path, batch_size=batch_size, mode="train", do_shuffle=True, epsilon=0)
@@ -113,7 +112,7 @@ for idx, row in grid_df.iterrows():
 
             model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy']) 
 
-            #print(model.summary())
+            print(model.summary())
 
 
             ## NN ends here
@@ -141,7 +140,6 @@ for idx, row in grid_df.iterrows():
                 #print(config[parser_args.task])
                 newConfig.write(cfgfile)
 
-            #print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
             print("Model is saved at: {}".format(model_name)) 
 
             # model history generate plot
@@ -152,9 +150,3 @@ for idx, row in grid_df.iterrows():
             # write grid to disk during current iteration to ensure that temporary results are stored
             grid_df.to_csv(grid_file, index=False)
             
-# draw a model
-#visualize.visualize_model(model=model, filename="{}/model_{}.png".format(plot_path, curr_time))
-
-# save the model history to disk to plot all results in single plot later
-# write_measures(history, measures_folder, 'measures_{}'.format(curr_time))
-

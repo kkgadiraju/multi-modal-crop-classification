@@ -176,7 +176,6 @@ for idx, row in grid_df.iterrows():
                 #print(config[parser_args.task])
                 newConfig.write(cfgfile)
 
-            #print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
             print("Model is saved at: {}".format(model_name)) 
 
             # model history generate plot

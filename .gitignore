@@ -127,3 +127,18 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# models folder
+8_models/
+
+# data folder
+1_data/
+
+# images
+**/*.png
+
+# csv files
+**/*.csv
+
+# pycache
+**/__pycache__/

@@ -32,8 +32,8 @@ start_time = start_time_n.strftime("%Y-%m-%d %H:%M:%S")
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop, water or energy""", default='zhong-cnn')
+parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
+parser.add_argument('-t', '--task', help="""classification task you are performing""", default='temporal-1dcnn')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()
@@ -153,7 +153,4 @@ for idx, row in grid_df.iterrows():
 
         # write grid to disk during current iteration to ensure that temporary results are stored
         grid_df.to_csv(grid_file, index=False)
-
-#print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
-#print("Model is saved at: {}".format(model_name)) 
 

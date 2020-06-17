@@ -45,7 +45,7 @@ val_path = str(config[parser_args.task]['VAL_FOLDER'])
 num_classes = int(config[parser_args.task]['NUM_CLASSES'])
 learning_rates = [0.0001, 0.0005]
 num_epochs = int(config[parser_args.task]['NUM_EPOCHS'])
-dropout_rates = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
+dropout_rates = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
 epsilon = float(config[parser_args.task]['EPSILON'])
 plot_path = str(config['plotting']['PLOT_FOLDER'])
 measures_folder = str(config['plotting']['MEASURE_FOLDER'])
@@ -59,11 +59,6 @@ else:
     param_grid = list(itertools.product(learning_rates, dropout_rates))
     grid_df = pd.DataFrame(param_grid, columns = ['lr', 'd'])
     grid_df['timestamp'] = 'None'         
-
-print(grid_df)
-
-print("Batch size = {}".format(batch_size))
-
 
 
 for idx, row in grid_df.iterrows(): 
@@ -82,7 +77,6 @@ for idx, row in grid_df.iterrows():
             sys.exit(0)
         else:
             grid_df.loc[idx, 'timestamp'] = curr_time
-            #print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
 
 
             train_generator = crop_generator(input_path=tr_path, batch_size=batch_size, mode="train", do_shuffle=True, epsilon=0)
@@ -141,7 +135,6 @@ for idx, row in grid_df.iterrows():
                 #print(config[parser_args.task])
                 newConfig.write(cfgfile)
 
-            #print(f"Hostname: {socket.gethostname()}, Number of classes = {num_classes}\n Learning rate = {learning_rate}\n dropout rate = {dropout_rate}\n timestamp = {curr_time}") 
             print("Model is saved at: {}".format(model_name)) 
 
             # model history generate plot
@@ -152,9 +145,3 @@ for idx, row in grid_df.iterrows():
             # write grid to disk during current iteration to ensure that temporary results are stored
             grid_df.to_csv(grid_file, index=False)
             
-# draw a model
-#visualize.visualize_model(model=model, filename="{}/model_{}.png".format(plot_path, curr_time))
-
-# save the model history to disk to plot all results in single plot later
-# write_measures(history, measures_folder, 'measures_{}'.format(curr_time))
-

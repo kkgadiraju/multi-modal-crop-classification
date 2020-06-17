@@ -12,13 +12,13 @@ import pandas as pd
 
 
 
-networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:02:10']], #1/5: Verified timestamp correctness from Task and Result List,
-            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-01 01:57:07']],#1/5: Verified timestamp correctness from Task and Result List
-            'vgg16':['crop_vgg16'+x+'.h5' for x in ['2019-12-14 17:59:47']]} #1/5: Verified timestamp correctness from Task and Result List
+networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:02:10']], 
+            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-01 01:57:07']],
+            'vgg16':['crop_vgg16'+x+'.h5' for x in ['2019-12-14 17:59:47']]} 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop or energy""", default='crop-gad')
+parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
+parser.add_argument('-t', '--task', help="""classification task you are performing""", default='crop-vgg16')
 parser.add_argument('-n', '--network', help="""name of the network you are predicting for""", default='vgg16')
 parser_args = parser.parse_args()
 
@@ -33,7 +33,7 @@ input_size = 224
 
 all_test_accuracies = []
 for timestamp in networks[parser_args.network]:
-    model_name = os.path.join('/mnt/data3/crop-classification/8_models/', timestamp)
+    model_name = os.path.join('/home/kgadira/multi-modal-crop-classification/8_models/', timestamp)
     train_datagen = ImageDataGenerator(rescale=1./255)
     val_datagen = ImageDataGenerator(rescale=1./255)
     test_datagen = ImageDataGenerator(rescale=1./255)
@@ -67,13 +67,11 @@ for timestamp in networks[parser_args.network]:
         acc = accuracy_score(actual_labels, predictions)
 
         kappa_score = cohen_kappa_score(actual_labels, predictions)
-        # f1 = f1_score(actual_labels, predictions, labels = classes_lst, average='samples')
 
         print(creport_df)
     
         print('Accuracy for {} is {}'.format(timestamp, acc))
 
-        print(cm)
     
         predict_df = pd.DataFrame(data=results, columns=['SP0', 'SP1', 'SP2', 'SP3', 'SP4', 'SP5'])
 
@@ -83,5 +81,5 @@ for timestamp in networks[parser_args.network]:
  
         predict_df['Class'] = actual_labels
    
-        #predict_df.to_csv(predicted_probabilities_csv_name, index=False)
+        predict_df.to_csv(predicted_probabilities_csv_name, index=False)
 

@@ -27,7 +27,7 @@ te_path = str(config[parser_args.task]['TEST_FOLDER'])
 
 test_accuracies = []
 for timestamp in timestamps:
-    model_name = os.path.join('/mnt/data3/crop-classification/8_models/', timestamp)
+    model_name = os.path.join('/home/kgadira/multi-modal-crop-classification/8_models/', timestamp)
     print(model_name)
     train_datagen = test_crop_generator(input_path=tr_path, batch_size=1, mode="train", num_classes =6, epsilon = 0, resize_params = (224, 224), do_shuffle=True)
     val_datagen = test_crop_generator(input_path=val_path, batch_size=1, mode="val", num_classes =6, epsilon = 0, resize_params = (224, 224), do_shuffle=True)
@@ -36,6 +36,7 @@ for timestamp in timestamps:
 
     model = load_model(model_name)
    
+    print(model.summary())
     for data_type, curr_gen in zip(['train', 'val', 'test'], [train_datagen, val_datagen, test_datagen]):
     
         predicted_probabilities_csv_name = './pt-{}-{}-probs.csv'.format(data_type, config[parser_args.task])
@@ -48,15 +49,11 @@ for timestamp in timestamps:
         for te_data, label, curr_path in curr_gen:
             result = model.predict(te_data, verbose=0)
             results.append(result)
-            #print(result.shape)
             prediction = np.argmax(result, axis = 1)
-            #print(prediction, label)
             all_predictions.append(prediction)
             all_gt.append(label[0])
             data_paths.append(curr_path)
-        #print(all_predictions)
         results = np.array(results)
-        print(results.shape)
         results = np.squeeze(results, axis=1)
 
         cm = confusion_matrix(all_gt, all_predictions)
@@ -73,13 +70,9 @@ for timestamp in timestamps:
 
         acc = accuracy_score(all_gt, all_predictions)
 
-        # f1 = f1_score(actual_labels, predictions, labels = classes_lst, average='samples')
-
-    
         print(creport_df)
         print('Accuracy for {} is {}'.format(timestamp, acc))
 
-        print(cm)
 
         predict_df = pd.DataFrame(data=results, columns=['TP0', 'TP1', 'TP2', 'TP3', 'TP4', 'TP5'])
 
@@ -90,14 +83,3 @@ for timestamp in timestamps:
         predict_df['Class'] = all_gt
 
         predict_df.to_csv(predicted_probabilities_csv_name, index=False)
-
-        #for i in range(len(all_gt)):
-        #    if int(all_predictions[i]) != int(all_gt[i]):
-        #        print('Path = {}, Actual = {}. Predicted = {}'.format(data_paths[i], all_gt[i], all_predictions[i]))
-                
-
-#print(f'All test accuracies = {test_accuracies}')
-#visualize.plot_confusion_matrix(cm, classes=['Corn', 'Cotton', 'Soy', 'Wheat'], title=parser_args.network+' Confusion Matrix')
-
-#creport_df.to_csv(parser_args.network+'creport.csv', index = True)
- 

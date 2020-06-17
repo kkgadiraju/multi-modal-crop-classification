@@ -17,21 +17,20 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 from sklearn.svm import SVC
 
 def generate_dataset(mode, clf_key):
-    ps_path = '/mnt/data3/crop-classification/4_ml/purely_spatial/{}-<Section: crop-{}>-probs.csv'.format(mode, clf_key)
-    pt_path = '/mnt/data3/crop-classification/4_ml/purely-temporal/pt-{}-<Section: temporal>-probs.csv'.format(mode)    
+    ps_path = './{}-<Section: crop-{}>-probs.csv'.format(mode, clf_key)
+    pt_path = './pt-{}-<Section: temporal>-probs.csv'.format(mode)    
     ps_df = pd.read_csv(ps_path)
     pt_df = pd.read_csv(pt_path)
     all_df = pd.merge(ps_df, pt_df, on='fname', how='inner')
-    print(all_df.columns)
     all_df_X = all_df[['SP0', 'SP1', 'SP2', 'SP3', 'SP4', 'SP5', 'TP0', 'TP1', 'TP2', 'TP3', 'TP4', 'TP5']].values
     all_df_Y = all_df['Class_x'].values
+    
     return [all_df_X, all_df_Y]
 
 
 def train_predict(clf_key, classifier, param_grid, trainX, trainY, valX, valY, testX, testY):
     all_tr_val_X = np.vstack((trainX, valX))
     all_tr_val_Y = np.hstack((trainY, valY))
-    print(all_tr_val_X.shape, all_tr_val_Y.shape)
     fold_meta = np.zeros(all_tr_val_X.shape[0])
     fold_meta[0:trainX.shape[0]] = -1
     cv = PredefinedSplit(test_fold=fold_meta)
@@ -60,9 +59,8 @@ if __name__=="__main__":
 
                         }
 
-    for clf_key in ['vgg16', 'resnet', 'densenet']:
+    for clf_key in ['vgg16']:
         trainX, trainY = generate_dataset('train', clf_key)
         valX, valY = generate_dataset('val', clf_key)
         testX, testY = generate_dataset('test', clf_key)
-        print('Train size = {}, val size = {}, Test size = {}'.format(trainX.shape[0], valX.shape[0], testX.shape[0]))
         train_predict(clf_key, SVC(), classifiers_grid['svc'], trainX, trainY, valX, valY, testX, testY)

@@ -23,7 +23,7 @@ networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop or energy""", default='crop-gad')
+parser.add_argument('-t', '--task', help="""classification task you are performing""", default='crop-vgg16')
 parser.add_argument('-n', '--network', help="""name of the network you are predicting for""", default='vgg16')
 parser_args = parser.parse_args()
 
@@ -38,11 +38,13 @@ all_test_accuracies = []
 all_kappa_scores = []
 
 for timestamp in networks[parser_args.network]:
-    model_name = os.path.join('/home/kgadira/crop-classification/8_models/', timestamp)
+    model_name = os.path.join('/home/kgadira/multi-modal-crop-classification/8_models/', timestamp)
     predicted_probabilities_csv_name = './{}-probs.csv'.format(config[parser_args.task])
     test_datagen = ImageDataGenerator(rescale=1./255)
     test_generator = test_datagen.flow_from_directory(te_path, target_size = (input_size, input_size), class_mode='categorical', shuffle = False, batch_size=1)
     model = load_model(model_name)
+
+    print(model.summary())
     data_paths = test_generator.filenames
 
     results = model.predict_generator(test_generator, 
