@@ -1,8 +1,13 @@
+'''
+@author: Krishna Karthik Gadiraju
+Replace the filenames of the best models you found in networks
+
+'''
+
 import tensorflow as tf
 tf_config = tf.ConfigProto()
 tf_config.gpu_options.allow_growth = True
 tf.keras.backend.set_session(tf.Session(config=tf_config))
-
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras.models import load_model
 import numpy as np
@@ -12,9 +17,9 @@ import pandas as pd
 
 
 
-networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:02:10']], #1/5: Verified timestamp correctness from Task and Result List,
-            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-01 01:57:07']],#1/5: Verified timestamp correctness from Task and Result List
-            'vgg16':['crop_vgg16'+x+'.h5' for x in ['2019-12-14 17:59:47']]} #1/5: Verified timestamp correctness from Task and Result List
+networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:02:10']],
+            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-01 01:57:07']],
+            'vgg16':['crop_vgg16'+x+'.h5' for x in ['2019-12-14 17:59:47']]} 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
@@ -33,7 +38,7 @@ all_test_accuracies = []
 all_kappa_scores = []
 
 for timestamp in networks[parser_args.network]:
-    model_name = os.path.join('/mnt/data3/crop-classification/8_models/', timestamp)
+    model_name = os.path.join('/home/kgadira/crop-classification/8_models/', timestamp)
     predicted_probabilities_csv_name = './{}-probs.csv'.format(config[parser_args.task])
     test_datagen = ImageDataGenerator(rescale=1./255)
     test_generator = test_datagen.flow_from_directory(te_path, target_size = (input_size, input_size), class_mode='categorical', shuffle = False, batch_size=1)
@@ -61,7 +66,6 @@ for timestamp in networks[parser_args.network]:
     acc = accuracy_score(actual_labels, predictions)
 
     all_test_accuracies.append(acc)
-    # f1 = f1_score(actual_labels, predictions, labels = classes_lst, average='samples')
    
     kappa_score = cohen_kappa_score(actual_labels, predictions)
 
@@ -69,7 +73,6 @@ for timestamp in networks[parser_args.network]:
     print(creport_df)
     print('Accuracy for {} is {}, kappa score is {}'.format(timestamp, acc, kappa_score))
 
-    print(cm)
     
     predict_df = pd.DataFrame(data=results, columns=['SP0', 'SP1', 'SP2', 'SP3', 'SP4', 'SP5'])
 
@@ -79,20 +82,8 @@ for timestamp in networks[parser_args.network]:
  
     predict_df['Class'] = actual_labels
    
+    # uncomment to save the predicted probabilites to use in svm
     #predict_df.to_csv(predicted_probabilities_csv_name)
-
-    for i in range(len(actual_labels)):
-        if int(predictions[i]) != int(actual_labels[i]):
-              print('Path = {}, Actual = {}. Predicted = {}'.format(data_paths[i], actual_labels[i], predictions[i]))
 
     visualize.plot_confusion_matrix(cm, classes=classes_lst, title=parser_args.network+' Confusion Matrix')
 
-#print(f'All test accuracies = {all_test_accuracies}')
-#visualize.plot_confusion_matrix(cm, classes=['Corn', 'Cotton', 'Soy', 'Wheat'], title=parser_args.network+' Confusion Matrix')
-
-#creport_df.to_csv(parser_args.network+'creport.csv', index = True)
- 
-#for i in range(len(actual_labels)):
-#    if int(predictions[i]) != int(actual_labels[i]):
-#        print('Path = {}, Actual = {}. Predicted = {}'.format(data_paths[i], actual_labels[i], predictions[i]))
-         

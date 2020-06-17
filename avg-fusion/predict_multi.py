@@ -11,10 +11,9 @@ import pandas as pd
 from data_generator import test_crop_generator
 
 
-networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2020-01-19 07:02:04']], # verified timestamp 1/7
-            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-19 13:59:12']],# verified timestamp 1/7
-            'vgg16':['crop_vgg16' + x + '.h5' for x in ['2020-01-15 18:48:09']] # verified timestamp 1/7
-}
+networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2020-01-19 07:02:04']], 
+            'densenet':['crop_densenet' + x + '.h5' for x in ['2020-01-19 13:59:12']],
+            'vgg16':['crop_vgg16' + x + '.h5' for x in ['2020-01-15 18:48:09']] }
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
@@ -49,9 +48,7 @@ for timestamp in networks[parser_args.network]:
         all_predictions.append(prediction)
         all_gt.append(label)
         data_paths.append(curr_path)
-    #print(all_predictions)
 
-    print(all_gt)
 
     cm = confusion_matrix(all_gt, all_predictions)
 
@@ -64,25 +61,11 @@ for timestamp in networks[parser_args.network]:
     creport_df = pd.DataFrame(creport).transpose()
 
     acc = accuracy_score(all_gt, all_predictions)
-
-    # f1 = f1_score(actual_labels, predictions, labels = classes_lst, average='samples')
-
     kappa_score = cohen_kappa_score(all_gt, all_predictions)
 
     print(creport)
     print('Accuracy for timestamp: {} is {}, kappa score = {}'.format(timestamp, acc, kappa_score))
     test_accuracies.append(acc)
-    #for i in range(len(all_gt)):
-    #    if all_predictions[i][0] != all_gt[i][0]:
-    #        print('Path = {}, Actual = {}. Predicted = {}'.format(data_paths[i], all_gt[i][0], all_predictions[i][0]))
     visualize.plot_confusion_matrix(cm, classes=classes_lst, title=parser_args.network+'Avg Fusion Confusion Matrix')
     
 print('All test accuracies = {}'.format(test_accuracies))
-#visualize.plot_confusion_matrix(cm, classes=['Corn', 'Cotton', 'Soy', 'Wheat'], title=parser_args.network+' Confusion Matrix')
-
-#creport_df.to_csv(parser_args.network+'creport.csv', index = True)
- 
-#for i in range(len(all_gt)):
-#    if int(all_predictions[i]) != int(all_gt[i]):
-#        print('Path = {}, Actual = {}. Predicted = {}'.format(data_paths[i], all_gt[i], all_predictions[i]))
-        

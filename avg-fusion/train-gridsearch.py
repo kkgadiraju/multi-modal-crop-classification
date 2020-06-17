@@ -187,9 +187,3 @@ for idx, row in grid_df.iterrows():
             # write grid to disk during current iteration to ensure that temporary results are stored
             grid_df.to_csv(grid_file, index=False)
             
-# draw a model
-#visualize.visualize_model(model=model, filename="{}/model_{}.png".format(plot_path, curr_time))
-
-# save the model history to disk to plot all results in single plot later
-# write_measures(history, measures_folder, 'measures_{}'.format(curr_time))
-
