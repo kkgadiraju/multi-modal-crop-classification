@@ -15,7 +15,7 @@ timestamps = ['crop_temporal'+x+'.h5' for x in ['2019-11-15 19:25:15']]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing""", default='crop-gad')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='temporal')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()

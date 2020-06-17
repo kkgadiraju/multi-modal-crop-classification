@@ -15,7 +15,7 @@ timestamps = {'temporal-1dcnn':['crop-1dcnn_1dcnn'+x+'.h5' for x in ['2020-02-13
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop or energy""", default='crop-gad')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='temporal-1dcnn')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()

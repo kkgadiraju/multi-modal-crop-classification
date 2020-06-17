@@ -3,7 +3,9 @@ Concatenates the spatial and temporal streams
 
 ## How to run the code:
 
-1. Download the data, collect its path and update it in ```config-gs.ini``` folder.
+1. Download the data, collect its path and update it in ```config-gs.ini``` folder. 
+
+**NOTE:** Current implementation assumes that the NAIP folder is named as ```filtered-extracts-subset``` and the MODIS folder is named as ```filtered-extracts-subset-ts``` for the dataloader to work.
 
 2. To run training/gridsearch cd to each folder and do:
  

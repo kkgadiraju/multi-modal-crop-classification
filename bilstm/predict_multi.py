@@ -15,7 +15,7 @@ timestamps = ['crop-bilstm_temporal'+x+'.h5' for x in ['2020-02-11 02:04:33']]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing""", default='temporal-bilstm')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='temporal-bilstm')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()

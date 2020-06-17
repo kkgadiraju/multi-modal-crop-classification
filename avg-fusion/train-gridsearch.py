@@ -41,7 +41,7 @@ networks = {'resnet50': ResNet50,
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing - either crop, water or energy""", default='spatiotemporal-vgg')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='spatiotemporal-vgg')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()

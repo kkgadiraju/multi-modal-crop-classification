@@ -18,7 +18,7 @@ networks = { 'resnet50': ['crop_resnet50' + x + '.h5' for x in ['2019-12-26 06:0
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing""", default='crop-vgg16')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='crop-vgg16')
 parser.add_argument('-n', '--network', help="""name of the network you are predicting for""", default='vgg16')
 parser_args = parser.parse_args()
 

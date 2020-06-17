@@ -33,7 +33,7 @@ start_time = start_time_n.strftime("%Y-%m-%d %H:%M:%S")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configPath', help="""path to config file""", default='./config-gs.ini')
-parser.add_argument('-t', '--task', help="""classification task you are performing""", default='temporal-1dcnn')
+parser.add_argument('-t', '--task', help="""task you are performing - refers to the header for each section in the config file""", default='temporal-1dcnn')
 parser_args = parser.parse_args()
 
 config = configparser.ConfigParser()
