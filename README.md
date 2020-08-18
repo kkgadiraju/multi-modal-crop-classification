@@ -37,5 +37,3 @@ The following gives the folder descriptions. Each folder is a separate set of ex
 * ```svm-fusion```: uses SVM classification to predict on a concatenation of spatial and temporal stream predicted probabilites.   
 
 To run the experiments, each folder has a readme file with instructions. 
-
-**NOTE:** Current implementation assumes that the NAIP folder is named as ```filtered-extracts-subset``` and the MODIS folder is named as ```filtered-extracts-subset-ts``` for the dataloader to work.
